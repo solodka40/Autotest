@@ -1,37 +1,23 @@
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.util.concurrent.TimeUnit;
 
-public class InsuranceTest {
-    private WebDriver driver;
-    private String baseUrl;
+public class InsuranceTest extends BaseTest {
+
     private Actions actions;
-
-    @Before
-    public void beforeTest() {
-
-        System.setProperty("webdriver.chrome.driver", "drv/chromedriver.exe");
-        baseUrl = "http://www.sberbank.ru/ru/person";
-        driver = new ChromeDriver();
-        actions = new Actions(driver);
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-
-        driver.manage().window().maximize();
-        driver.get(baseUrl);
+    protected void fillField(By locator, String value) {
+        driver.findElement(locator).clear();
+        driver.findElement(locator).sendKeys(value);
     }
 
     @Test
-    public void testInsurance() {
-
+    @Ignore
+        public void testInsurance() {
+        driver.get(baseUrl);
+        actions = new Actions(driver);
         WebElement cookies = driver.findElement(By.xpath("//BUTTON[@class='kitt-cookie-warning__close'][text()='Закрыть']"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", cookies);
 
@@ -60,15 +46,10 @@ public class InsuranceTest {
                 break;
             }
         }
-//        System.out.println(Arrays.toString(array));
-//        System.out.println(mywindow);
-//        System.out.println(driver.getWindowHandle());
         ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("//*[contains(text(),'Выберите сумму страховой защиты')]")));
         driver.findElement(By.xpath("//*[contains(text(),'Минимальная')]")).click();
         ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("//*[contains(text(),'Стоимость и срок действия')]")));
         actions.click(driver.findElement(By.xpath("//button[@class='btn btn-primary btn-large']"))).build().perform();
-
-
 
 
         WebElement tytle1 = driver.findElement(By.xpath("//a[contains(text(),'Оформление')]"));
@@ -104,7 +85,7 @@ public class InsuranceTest {
 
         Assert.assertEquals("Андреева", driver.findElement(By.id("surname_vzr_ins_0")).getAttribute("value"));
         Assert.assertEquals("Алена", driver.findElement(By.id("name_vzr_ins_0")).getAttribute("value"));
-        Assert.assertEquals("Андреева",driver.findElement(By.id("surname_vzr_ins_0")).getAttribute("value"));
+        Assert.assertEquals("Андреева", driver.findElement(By.id("surname_vzr_ins_0")).getAttribute("value"));
 
 
         ((JavascriptExecutor) driver).executeScript("return arguments[0].scrollIntoView(true);", driver.findElement(By.xpath("//legend[contains(text(),'Контакты')]")));
@@ -117,16 +98,6 @@ public class InsuranceTest {
         String k = driver.findElement(By.xpath("//input-phone2/span/validation-message/span[contains(text(),'Поле не заполнено.')]")).getText();
         Assert.assertTrue(k.contains("Поле не заполнено"));
 
-    }
-
-    public void fillField(By locator, String value) {
-        driver.findElement(locator).clear();
-        driver.findElement(locator).sendKeys(value);
-    }
-
-    @After
-    public void afterTest() {
-        driver.quit();
     }
 
 
