@@ -1,4 +1,5 @@
 package Pages;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,10 +17,12 @@ public class MainPage {
         PageFactory.initElements(driver, this);
     }
 
+    @Step("Выбран пункт меню {0}")
     public void selectMainMenu(String menuItem) {
         mainMenu.findElement(By.xpath(".//a[@aria-label='" + menuItem + "']")).click();
     }
 
+    @Step("Выбран пункт меню {0}")
     public void selectSubMenu(String menuItem) {
         subMenu.findElement(By.xpath(".//li/a[text()='" + menuItem + "']")).click();
     }

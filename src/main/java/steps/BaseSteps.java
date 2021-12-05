@@ -1,26 +1,34 @@
+package steps;
+
+
+import io.qameta.allure.Attachment;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
+import util.TestProperties;
 
 
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
-public class BaseTest {
+public class BaseSteps {
+
+
+    public static WebDriver getDriver() {
+        return driver;
+    }
+
     protected static WebDriver driver;
     protected static String baseUrl;
     public static Properties properties = TestProperties.getInstance().getProperties();
 
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    @Before
+    public void setUp() {
 
         switch (properties.getProperty("browser")){
             case "firefox":
@@ -43,8 +51,8 @@ public class BaseTest {
         driver.manage().window().maximize();
     }
 
-    @AfterClass
-    public static void tearDown() throws Exception {
+    @After
+    public void tearDown()  {
         driver.quit();
     }
 
@@ -57,7 +65,10 @@ public class BaseTest {
         }
     }
 
-
+    @Attachment(type = "image/png", value = "Скриншот при ошибке")
+    public static byte[] takeScreenshot() {
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+    }
 
     protected void checkFillField(String value, By locator) {
         assertEquals(value, driver.findElement(locator).getAttribute("value"));
