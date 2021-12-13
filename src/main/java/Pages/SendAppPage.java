@@ -2,15 +2,13 @@ package Pages;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import steps.BaseSteps;
 
-public class SendAppPage extends BasePage{
+public class SendAppPage extends BasePage {
 
     @FindBy(id = "surname_vzr_ins_0")
     WebElement surname;
@@ -23,7 +21,7 @@ public class SendAppPage extends BasePage{
 
 
     @FindBy(id = "person_lastName")
-   public WebElement person_lastName;
+    public WebElement person_lastName;
 
     @FindBy(id = "person_firstName")
     WebElement person_firstName;
@@ -49,18 +47,11 @@ public class SendAppPage extends BasePage{
     @FindBy(id = "documentIssue")
     WebElement documentIssue;
 
-   @FindBy(xpath = "//legend[contains(text(),'Страхователь')]")
-   public WebElement person;
+    @FindBy(xpath = "//legend[contains(text(),'Страхователь')]")
+    public WebElement person;
 
     @FindBy(xpath = "//button[@class='btn btn-primary page__btn']")
     public WebElement finalBtn;
-
-    public SendAppPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-    }
-
-    public SendAppPage() {
-    }
 
     public void fillField(String fieldName, String value) {
         switch (fieldName) {
@@ -102,8 +93,9 @@ public class SendAppPage extends BasePage{
                 throw new AssertionError("Поле '" + fieldName + "' не объявлено на странице");
         }
     }
-    public String getFillField(String fieldName){
-        switch (fieldName){
+
+    public String getFillField(String fieldName) {
+        switch (fieldName) {
             case "Фамилия":
                 return surname.getAttribute("value");
             case "Имя":
@@ -126,16 +118,20 @@ public class SendAppPage extends BasePage{
                 return documentDate.getAttribute("value");
             case "Кем выдан":
                 return documentIssue.getAttribute("value");
-                    }
+        }
         throw new AssertionError("Поле не объявлено на странице");
     }
 
 
-    public void checkFieldErrorMessage(String field, String errorMessage){
-        String xpath = "//*[text()='"+field+"']/..//*[@class='validation-error']";
-        WebDriverWait wait = new WebDriverWait(BaseSteps.getDriver(),5);
+    public void checkFieldErrorMessage(String field, String errorMessage) {
+        String xpath = "//*[text()='" + field + "']/..//*[@class='validation-error']";
+        WebDriverWait wait = new WebDriverWait(BaseSteps.getDriver(), 5);
         String actualValue = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath))).getText();
         Assert.assertTrue(String.format("Получено значение [%s]. Ожидалось [%s]", actualValue, errorMessage),
                 actualValue.contains(errorMessage));
+    }
+
+    public void checkOutBtn() {
+        finalBtn.click();
     }
 }

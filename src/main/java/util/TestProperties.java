@@ -12,7 +12,7 @@ public class TestProperties {
     private TestProperties(){
         //System.setProperty("environment", "application");
         try {
-            properties.load(new FileInputStream(new File("./" + System.getProperty("environment") + ".properties")));
+            properties.load(new FileInputStream("./" + System.getProperty("my.prop.file","environment") + ".properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
