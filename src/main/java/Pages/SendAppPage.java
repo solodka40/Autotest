@@ -1,12 +1,8 @@
 package Pages;
 
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import steps.BaseSteps;
 
 public class SendAppPage extends BasePage {
 
@@ -52,6 +48,15 @@ public class SendAppPage extends BasePage {
 
     @FindBy(xpath = "//button[@class='btn btn-primary page__btn']")
     public WebElement finalBtn;
+
+    @FindBy(xpath = "//div[@class='alert-form alert-form-error']")
+    WebElement allertError;
+
+    @FindBy(xpath = "//input-phone2/span/validation-message/span[contains(text(),'Поле не заполнено.')]")
+    WebElement allertError1;
+
+    @FindBy(xpath = "//legend[contains(text(),'Контакты')]")
+    WebElement contacts;
 
     public void fillField(String fieldName, String value) {
         switch (fieldName) {
@@ -123,15 +128,20 @@ public class SendAppPage extends BasePage {
     }
 
 
-    public void checkFieldErrorMessage(String field, String errorMessage) {
-        String xpath = "//*[text()='" + field + "']/..//*[@class='validation-error']";
-        WebDriverWait wait = new WebDriverWait(BaseSteps.getDriver(), 5);
-        String actualValue = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath))).getText();
-        Assert.assertTrue(String.format("Получено значение [%s]. Ожидалось [%s]", actualValue, errorMessage),
-                actualValue.contains(errorMessage));
+    public void checkOutBtn() {
+        waitUntilElementToBeClickable(finalBtn);
+        jsExec.executeScript("arguments[0].click();", finalBtn);
     }
 
-    public void checkOutBtn() {
-        finalBtn.click();
+    public void checkingErrors() {
+        jsExec.executeScript("return arguments[0].scrollIntoView(true);", contacts);
+
+        String s = allertError.getText();
+        Assert.assertTrue("Текст ошибки не соответствует заявленному", s.contains("При заполнении данных произошла ошибка"));
+
+        String k = allertError1.getText();
+        Assert.assertTrue("Текст ошибки не соответствует заявленному", k.contains("Поле не заполнено"));
     }
+
+
 }

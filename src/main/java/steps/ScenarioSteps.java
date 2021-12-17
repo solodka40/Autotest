@@ -66,12 +66,19 @@ public class ScenarioSteps {
 
     @When("Выбираем сумму страхового покрытия")
     public void selectSum() {
-        policyPage.amount.click();
+
+        policyPage.SumOfIns();
     }
 
     @When("Нажимаем на кнопку Оформить")
     public void sendBtn() {
-        policyPage.sendBtn.click();
+        policyPage.goToSendAppPage();
+    }
+
+    @When("Проверяем заголовок  следующей страницы. Должен быть: \"(.+)\"$")
+    public void checkingTitle(String name1) {
+        policyPage.checkAfterSendBtn(name1);
+
     }
 
     @When("^заполняются поля:$")
@@ -84,5 +91,22 @@ public class ScenarioSteps {
     @When("Отправить заявку$")
     public void checkOutBtn() {
         sendAppPage.checkOutBtn();
+    }
+
+
+    @When("^Проверяются поля:$")
+    public void checkFillFields(String dataField){
+        sendAppPage.getFillField(dataField);
+
+    }
+
+    @When("Жмем на кнопку Отправить заявку")
+    public void checkOut(){
+        sendAppPage.checkOutBtn();
+    }
+
+    @When("Проверяем текст ошибок")
+    public void checkingOfErrors(){
+        sendAppPage.checkingErrors();
     }
 }
